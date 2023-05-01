@@ -12,6 +12,13 @@ namespace VTS.Core {
 		/// <param name="message">Message to log.</param>
 		void Log(string message);
 		/// <summary>
+		/// Logs a message with a custom [Prefix]
+		/// </summary>
+		/// <param name="message">Message to log.</param>
+		/// <param name="prefix">Custom log prefix.</param>
+		void CustomLog(string prefix,string message);
+
+		/// <summary>
 		/// Logs a warning.
 		/// </summary>
 		/// <param name="warning">Warning to log.</param>

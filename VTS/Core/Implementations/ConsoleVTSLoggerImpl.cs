@@ -8,6 +8,11 @@ namespace VTS.Core {
 			Console.WriteLine(string.Format("[Info] - {0}", message));
 		}
 
+		public void CustomLog(string prefix, string message)
+        {
+			Console.WriteLine(string.Format("[{0}] - {1}", prefix, message));
+        }
+		
 		public void LogError(string error) {
 			Console.WriteLine(string.Format("[Error] - {0}", error));
 		}
