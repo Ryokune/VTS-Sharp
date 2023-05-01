@@ -14,7 +14,7 @@ namespace VTS.Core {
 		private string _pluginName;
 		public string PluginName { get { return this._pluginName; } }
 		private string _pluginAuthor;
-		public string PluginAuthor { get { return this._pluginName; } }
+		public string PluginAuthor { get { return this._pluginAuthor; } }
 		private string _pluginIcon;
 		public string PluginIcon { get { return this._pluginIcon; } }
 
