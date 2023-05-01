@@ -5,7 +5,7 @@ using VTS.Unity;
 public class MyFirstPlugin : UnityVTSPlugin {
 	// Start is called before the first frame update
 	private void Start() {
-		// Everything you need to get started!
+		// Everything you need to get started! test
 		Initialize(
 			new WebSocketSharpImpl(this.Logger),
 			new NewtonsoftJsonUtilityImpl(),
