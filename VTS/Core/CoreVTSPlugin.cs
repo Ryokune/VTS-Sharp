@@ -91,7 +91,7 @@ namespace VTS.Core {
 					(r) => {
 						// If initial authentication fails, try again
 						// (Likely just needs fresh token)
-						_logger.LogWarning(string.Format("{0}!\nID: {1}\nError message: {2}", r.messageType, r.data.errorID, r.data.message));
+						_logger.CustomLog(r.messageType,string.Format("ID: {0}\nError message: {1}", r.data.errorID, r.data.message));
 						if (r.data.errorID == ErrorID.TokenRequestDenied) return;
 						Reauthenticate(onCombinedConnect, onError);
 					}
