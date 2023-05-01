@@ -211,37 +211,51 @@ namespace VTS.Core {
 		#region I/O
 
 		public void Connect(Action onConnect, Action onDisconnect, Action<Exception> onError) {
-			// If the port we're trying to connect to isn't a known port...
-			if (!(PORTS_BY_IP.ContainsKey(this._ip) && PORTS_BY_IP[this._ip].ContainsKey(this._port))) {
-				// First try to connect to the port we proclaim...
-				ConnectImpl(this._port, onConnect, onDisconnect, (e) => {
-					// If that fails, let's try the first port we can find on UDP!
-					this._logger.Log(string.Format("Unable to connect to VTube Studio port {0}, waiting for port discovery...", this._port));
-					// Create a callback that will forcibly try to connect to the default port, if we cannot discover a port in time.
-					this._portDiscoveryTimer = DEFAULT_PORT_DISCOVERY_TIMEOUT;
-					this._onPortDiscoveryTimeout = () => {
-						this._logger.LogError(string.Format("Wait for port discovery has timed out. Finally, attempting connection on default port {1}.", this._port, DEFAULT_PORT));
-						ClearConnectionCallbacks();
-						ConnectImpl(DEFAULT_PORT, onConnect, onDisconnect, onError);
-					};
-					// Wait until we discover a functional port, then try to connect.
-					this._onLocalPortDiscovered = (port) => {
-						if (port != this._port) {
-							ClearConnectionCallbacks();
-							ConnectImpl(port, onConnect, onDisconnect, onError);
-						}
-					};
-				});
-			}
-			else {
-				ConnectImpl(this._port, onConnect, onDisconnect, onError);
-			}
-		}
+            /*// If the port we're trying to connect to isn't a known port...
+            if (!(PORTS_BY_IP.ContainsKey(this._ip) && PORTS_BY_IP[this._ip].ContainsKey(this._port)))
+            {
+                // First try to connect to the port we proclaim...
+                ConnectImpl(this._port, onConnect, onDisconnect, (e) =>
+                {
+                    // If that fails, let's try the first port we can find on UDP!
+                    this._logger.Log(string.Format("Unable to connect to VTube Studio port {0}, waiting for port discovery...", this._port));
+                    // Create a callback that will forcibly try to connect to the default port, if we cannot discover a port in time.
+                    this._portDiscoveryTimer = DEFAULT_PORT_DISCOVERY_TIMEOUT;
+                    this._onPortDiscoveryTimeout = () =>
+                    {
+                        this._logger.LogError(string.Format("Wait for port discovery has timed out. Finally, attempting connection on default port {1}.", this._port, DEFAULT_PORT));
+                        ClearConnectionCallbacks();
+                        ConnectImpl(DEFAULT_PORT, onConnect, onDisconnect, onError);
+                    };
+                    // Wait until we discover a functional port, then try to connect.
+                    this._onLocalPortDiscovered = (port) =>
+                    {
+                        if (port != this._port)
+                        {
+                            ClearConnectionCallbacks();
+                            ConnectImpl(port, onConnect, onDisconnect, onError);
+                        }
+                    };
+                });
+            }
+            else
+            {
+                ConnectImpl(this._port, onConnect, onDisconnect, onError);
+            }*/
+			//commenting because i have no idea what im doing.
+
+            _logger.Log(string.Format("Waiting for UDP Port Discovery to find an active VTube Studio Port."));
+            this._onLocalPortDiscovered = (port) =>
+            {
+                ClearConnectionCallbacks();
+                ConnectImpl(port, onConnect, onDisconnect, onError);
+            };
+        }
 
 		private void ConnectImpl(int port, Action onConnect, Action onDisconnect, Action<Exception> onError) {
 			if (this._ws != null) {
 				Disconnect();
-				SetPort(port);
+				if (!SetPort(port)) return;
 				this._ws.Start(string.Format(VTS_WS_URL, this._ip.ToString(), this._port), onConnect, onDisconnect, onError);
 			}
 			else {
